@@ -39,6 +39,11 @@ class Article extends Component {
         return Math.floor(seconds) + " seconds";
     }
 
+    iframeProcess = (event) => {
+        var url = this.props.article.url
+        this.props.showIframe("https://mewyolkthymes.herokuapp.com/" + url)
+    }
+
     render() {
         const { article } = this.props
         var time = this.timeSince(new Date(article.publishedAt))
@@ -77,8 +82,8 @@ class Article extends Component {
                     </CardContent>
                 </CardActionArea>
                 <CardActions>
-                    <Button size="small" color="secondary">Share</Button>
-                    <Button size="small" color="secondary">Learn More</Button>
+                    <Button size="small" color="secondary" target="_blank" onClick={this.iframeProcess}>Open Here</Button>
+                    <Button size="small" color="secondary" target="_blank" href={article.url}>Read More</Button>
                 </CardActions>
             </Card>
         )
