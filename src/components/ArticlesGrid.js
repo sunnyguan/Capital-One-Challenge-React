@@ -31,7 +31,7 @@ class ArticlesGrid extends Component {
     componentDidMount() {
         this.setState({ loading: true })
         console.log("loading headlines...")
-        fetch('http://localhost:5000/api/top-headlines')
+        fetch('https://newsapi.org/v2/top-headlines?country=us&category=technology&pageSize=100&apiKey=e191d551ff8a44b09b5ddeb3afbf7bfa')
             .then(data => data.json())
             .then(data => data["articles"])
             .then(data => {
