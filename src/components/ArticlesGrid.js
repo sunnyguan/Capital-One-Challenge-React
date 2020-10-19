@@ -31,7 +31,7 @@ class ArticlesGrid extends Component {
     componentDidMount() {
         this.setState({ loading: true })
         console.log("loading headlines...")
-        fetch('https://newsapi.org/v2/top-headlines?country=us&category=technology&pageSize=100&apiKey=e191d551ff8a44b09b5ddeb3afbf7bfa')
+        fetch('https://mewyolkthymes.herokuapp.com/api/top-headlines')
             .then(data => data.json())
             .then(data => data["articles"])
             .then(data => {
