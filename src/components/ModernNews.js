@@ -10,7 +10,6 @@ import { Box } from '@material-ui/core'
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import ArticlesGrid from './ArticlesGrid'
-import { ToggleCategory } from './ToggleCategory'
 import { VintageExpand, SearchBox, ToggleStyle } from './Tools'
 
 export const light = {
@@ -56,11 +55,10 @@ class ModernNews extends Component {
                 <Box width="95%" style={{margin: "auto"}}>
                     <Typography variant="h3" className="heading">
                         Mew Yolk Thymes
-                        </Typography>
+                    </Typography>
 
                     <VintageExpand />
                     <SearchBox updateSearch={this.updateSearch} />
-                    <ToggleCategory />
                     <ToggleStyle toggleTheme={this.toggleTheme} />
 
                     <ArticlesGrid searchTerm={this.state.searchTerm} />

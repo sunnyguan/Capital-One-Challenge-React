@@ -4,7 +4,7 @@ import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Switch from '@material-ui/core/Switch'
 
-export const ToggleCategory = () => {
+export const ToggleCategory = ({ updateFilters }) => {
     const [state, setState] = React.useState({
         entertainment: true,
         sports: true,
@@ -12,7 +12,9 @@ export const ToggleCategory = () => {
     });
 
     const handleChange = (event) => {
-        setState({ ...state, [event.target.name]: event.target.checked });
+        var newState = { ...state, [event.target.name]: event.target.checked }
+        setState(newState);
+        updateFilters(newState);
     };
 
     return (
