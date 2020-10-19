@@ -4,53 +4,68 @@ import '../css/modern.css'
 import 'fontsource-roboto'
 
 import { Typography } from '@material-ui/core'
+import { createMuiTheme } from '@material-ui/core/styles'
+import { ThemeProvider } from '@material-ui/core'
+import { Box } from '@material-ui/core'
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 import ArticlesGrid from './ArticlesGrid'
 import { ToggleCategory } from './ToggleCategory'
 import { VintageExpand, SearchBox, ToggleStyle } from './Tools'
 
-import Pagination from '@material-ui/lab/Pagination';
-import { Box } from '@material-ui/core'
+export const light = {
+    palette: {
+        type: 'light',
+    },
+}
+
+export const dark = {
+    palette: {
+        type: 'dark',
+    },
+}
 
 class ModernNews extends Component {
 
     state = {
-        page: 1,
-        pageCount: 1
+        searchTerm: "",
+        theme: false
     }
 
-    updatePage = (event, pageNumber) => {
-        this.setState({
-            page: pageNumber
-        })
+    updateSearch = (e) => {
+        if (e.keyCode === 13) {
+            e.preventDefault();
+            this.setState({ searchTerm: e.target.value })
+        }
     }
 
-    updatePageCount = (pageNumber) => {
-        console.log("new page count received: " + pageNumber)
-        this.setState({
-            pageCount: pageNumber
-        })
+    toggleTheme = (e) => {
+        this.setState({ theme: !this.state.theme })
     }
 
     render() {
+        console.log(this.state)
+        const theme = createMuiTheme({
+            palette: {
+                type: this.state.theme ? "dark" : "light",
+            },
+        });
         return (
-            <div className="main">
-                <Typography variant="h3" className="heading">
-                    Mew Yolk Thymes
-                </Typography>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <Box width="95%" style={{margin: "auto"}}>
+                    <Typography variant="h3" className="heading">
+                        Mew Yolk Thymes
+                        </Typography>
 
-                <VintageExpand />
-                <SearchBox />
-                <ToggleCategory />
-                <ToggleStyle />
+                    <VintageExpand />
+                    <SearchBox updateSearch={this.updateSearch} />
+                    <ToggleCategory />
+                    <ToggleStyle toggleTheme={this.toggleTheme} />
 
-                <Box alignItems="center" justifyContent="center" display="flex" margin="15px">
-                    <Pagination count={this.state.pageCount} defaultPage={1} siblingCount={4} 
-                        color="secondary" onChange={this.updatePage} />
+                    <ArticlesGrid searchTerm={this.state.searchTerm} />
                 </Box>
-
-                <ArticlesGrid page={this.state.page} updatePageCount={this.updatePageCount} />
-            </div>
+            </ThemeProvider>
         )
     }
 }

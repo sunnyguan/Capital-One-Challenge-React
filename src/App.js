@@ -1,26 +1,31 @@
 import React from 'react';
-import logo from './logo.svg';
 import './css/App.css';
+import { ThemeProvider } from '@material-ui/core'
+import { createMuiTheme } from '@material-ui/core/styles'
+import ModernNews from './components/ModernNews'
+
+export const light = {
+  palette: {
+    type: 'light',
+  },
+}
+
+export const dark = {
+  palette: {
+    type: 'dark',
+  },
+}
 
 function App() {
+  const [theme, setTheme] = React.useState(true)
+  const appliedTheme = createMuiTheme(theme ? light : dark)
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <ThemeProvider theme={appliedTheme}>
+      <ModernNews setTheme={setTheme(!theme)} />
+    </ThemeProvider>
+  )
+
 }
 
 export default App;

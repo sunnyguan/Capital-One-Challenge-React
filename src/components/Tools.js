@@ -12,10 +12,11 @@ export const VintageExpand = () =>
         <Button href="/vintage" className="vintage-link">Vintage</Button>
     </div>
 
-export const SearchBox = () => {
+export const SearchBox = ({ updateSearch }) => {
+
     return (
         <form className="search-container">
-            <TextField id="outlined-basic" label="Search" variant="outlined" />
+            <TextField id="outlined-basic" label="Search" variant="outlined" onKeyDown={updateSearch} />
             <img
                 alt="search icon"
                 className="search-icon"
@@ -26,9 +27,9 @@ export const SearchBox = () => {
     )
 }
 
-export const ToggleStyle = () => {
+export const ToggleStyle = ({ toggleTheme }) => {
+
     const [state, setState] = React.useState({
-        gridLayout: true,
         darkMode: false
     });
 
@@ -36,17 +37,16 @@ export const ToggleStyle = () => {
         setState({ ...state, [event.target.name]: event.target.checked });
     };
 
+    const handleDarkMode = (event) => {
+        handleChange(event);
+        toggleTheme();
+    }
+
     return (
         <FormGroup row style={{ display: "block", textAlign: "center", width: "100%" }}>
-            <FormControlLabel label="Grid Layout"
-                control={
-                    <Switch checked={state.gridLayout} onChange={handleChange} name="gridLayout"
-                        color="primary" />
-                }
-            />
             <FormControlLabel label="Dark Mode"
                 control={
-                    <Switch checked={state.darkMode} onChange={handleChange} name="darkMode"
+                    <Switch checked={state.darkMode} onChange={handleDarkMode} name="darkMode"
                         color="primary" />
                 }
             />
