@@ -57,6 +57,7 @@ class ModernNews extends Component {
                         Mew Yolk Thymes
                     </Typography>
 
+                    <VintageExpand />
                     <SearchBox updateSearch={this.updateSearch} />
                     <ToggleStyle toggleTheme={this.toggleTheme} />
 

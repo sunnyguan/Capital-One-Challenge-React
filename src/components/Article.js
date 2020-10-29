@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import Card from '@material-ui/core/Card'
-import CardActionArea from '@material-ui/core/CardActionArea'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
@@ -44,43 +43,54 @@ class Article extends Component {
         this.props.showIframe("https://mewyolkthymes.herokuapp.com/" + url)
     }
 
+    getColor = (label) => {
+        var color = "grey";
+        if (label === "entertainment") {
+            color = "lightskyblue";
+        } else if (label === "sports") {
+            color = "lightsalmon";
+        } else {
+            color = "lightcoral";
+        }
+        return color;
+    }
+
     render() {
         const { article } = this.props
         var time = this.timeSince(new Date(article.publishedAt))
         return (
             <Card key={article.id}>
-                <CardActionArea>
-                    <CardHeader
-                        avatar={
-                            <Avatar aria-label="recipe">
-                                {article.source.name.substring(0, 1)}
-                            </Avatar>
-                        }
-                        title={article.source.name}
-                        subheader={time}
-                    />
-                    <CardMedia
-                        component="img"
-                        alt="associated picture"
-                        height="450"
-                        src={article.urlToImage === null ? "/icon.png" : article.urlToImage}
-                        onError={e => {
-                            e.target.src = "/icon.png";
-                        }}
-                    />
-                    <CardContent>
-                        <Typography gutterBottom variant="h5" component="h2">
-                            {article.title}
-                        </Typography>
-                        <Typography variant="body1" color="textSecondary" component="p">
-                            {article.description}
-                        </Typography>
-                        <Divider />
-                        <Typography variant="body2" color="textSecondary" component="p" style={{ marginTop: "10px" }}>
-                            {article.content}
-                        </Typography>
-                    </CardContent>
-                </CardActionArea>
+                <CardHeader
+                    avatar={
+                        <Avatar aria-label="recipe">
+                            {article.source.name.substring(0, 1)}
+                        </Avatar>
+                    }
+                    title={article.source.name}
+                    subheader={<>{time} ago - {article.label}</>}
+                    style={{background: this.getColor(article.label)}}
+                />
+                <CardMedia
+                    component="img"
+                    alt="associated picture"
+                    height="450"
+                    src={article.urlToImage === null ? "/icon.png" : article.urlToImage}
+                    onError={e => {
+                        e.target.src = "/icon.png";
+                    }}
+                />
+                <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                        {article.title}
+                    </Typography>
+                    <Typography variant="body1" color="textSecondary" component="p">
+                        {article.description}
+                    </Typography>
+                    <Divider />
+                    <Typography variant="body2" color="textSecondary" component="p" style={{ marginTop: "10px" }}>
+                        {article.content}
+                    </Typography>
+                </CardContent>
                 <CardActions>
                     <Button size="small" color="secondary" target="_blank" onClick={this.iframeProcess}>Open Here</Button>
                     <Button size="small" color="secondary" target="_blank" href={article.url}>Read More</Button>
