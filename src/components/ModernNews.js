@@ -52,13 +52,15 @@ class ModernNews extends Component {
         return (
             <ThemeProvider theme={theme}>
                 <CssBaseline />
+                
                 <Box width="95%" style={{margin: "auto"}}>
+                    <SearchBox updateSearch={this.updateSearch} />
                     <Typography variant="h3" className="heading">
+                        <img alt="mew yolk thymes icon" width="42px" src="/icon.png" /> 
                         Mew Yolk Thymes
                     </Typography>
 
                     <VintageExpand />
-                    <SearchBox updateSearch={this.updateSearch} />
                     <ToggleStyle toggleTheme={this.toggleTheme} />
 
                     <ArticlesGrid searchTerm={this.state.searchTerm} />

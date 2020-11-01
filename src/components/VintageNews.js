@@ -9,16 +9,46 @@ class VintageNews extends Component {
 
     state = {
         data: [],
+        error: false,
         loading: true
     }
 
     componentDidMount() {
-        fetch('https://mewyolkthymes.herokuapp.com/api/top-headlines')
-            .then(data => data.json())
-            .then(data => data["articles"])
-            .then(data => {
-                this.setState({ data: data, loading: false })
-            })
+        console.log("loading headlines...")
+        var categories = ["entertainment", "sports", "technology"];
+        var promises = [];
+        categories.forEach(item => {
+            promises.push(
+                fetch(`https://newsapi.org/v2/top-headlines?country=us&category=${item}&pageSize=100&apiKey=78b9d599c4f94f8fa3afb1a5458928d6`)
+                    .then(data => data.json())
+                    .then(data => data["articles"])
+                    .then(articles => {
+                        for (var article of articles)
+                            article["label"] = item;
+                        return {"status": 200, "data": articles}
+                    }).catch(err => {
+                        return {"status": 500}
+                    })
+            );
+        })
+
+        Promise.all(promises).then(articles => {
+            var allArticles = []
+            var errorOccurred = false;
+            for (var articleGroup of articles) {
+                if(articleGroup["status"] !== 200) 
+                    errorOccurred = true
+                allArticles = allArticles.concat(articleGroup["data"]);
+            }
+            if(!errorOccurred) {
+                allArticles.sort(function (a, b) {
+                    return new Date(b.publishedAt) - new Date(a.publishedAt);
+                });
+                this.setState({ data: allArticles, loading: false })
+            } else {
+                this.setState({ loading: false, error: true })
+            }
+        })
     }
 
     chunk(arr, len) {
@@ -59,9 +89,9 @@ class VintageNews extends Component {
                                 style={{ color: "black" }}>Modern</a></div>
                         </div>
                         <div className="content">
-                        {!this.state.loading ? 
+                        {this.state.error ? <h2>Error occurred while fetching API!</h2> : <>
+                            {!this.state.loading ? 
                                 <>
-                                    <h2>Loading...</h2>
                                     <div className="collumns">
                                         <div className="sidebar collumn">
                                             {chunks[0].map((value, index) => {
@@ -86,6 +116,7 @@ class VintageNews extends Component {
                                 </>
                                 : <></>
                                 }
+                            </>}
                         </div>
                     </div>
                 </>

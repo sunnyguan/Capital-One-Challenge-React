@@ -16,13 +16,7 @@ export const SearchBox = ({ updateSearch }) => {
 
     return (
         <form className="search-container">
-            <TextField id="outlined-basic" label="Search" variant="outlined" onKeyDown={updateSearch} />
-            <img
-                alt="search icon"
-                className="search-icon"
-                width={56}
-                src="/search-icon.png"
-            />
+            <TextField className="search-box" id="outlined-basic" label="Search" variant="outlined" onKeyDown={updateSearch} />
         </form>
     )
 }
