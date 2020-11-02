@@ -7,11 +7,13 @@ import VintageArticle from './VintageArticle'
 class VintageNews extends Component {
 
     state = {
-        data: [],
-        error: false,
-        loading: true
+        data: [], // articles
+        error: false, // if there was an error fetching from News API
+        loading: true // if the page is currently loading
     }
 
+    // calls API when rendered
+    // TODO: combine this and modern view's similar function into one service component
     componentDidMount() {
         console.log("loading headlines...")
         var categories = ["entertainment", "sports", "technology"]
@@ -50,6 +52,7 @@ class VintageNews extends Component {
         })
     }
 
+    // separates an array into equally sized chunks
     chunk(arr, len) {
         var chunks = [],
             i = 0,
@@ -59,6 +62,7 @@ class VintageNews extends Component {
         return chunks;
     }
 
+    // shuffles news articles and makes sure that the first article always has an image
     shuffle(a) {
         for (let i = a.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));

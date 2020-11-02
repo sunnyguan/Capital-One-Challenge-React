@@ -5,12 +5,15 @@ import Switch from '@material-ui/core/Switch'
 
 // ToggleCategory functional component provides functionality for toggling news categories
 export const ToggleCategory = ({ updateFilters }) => {
+    
+    // keeps track of the three toggles
     const [state, setState] = React.useState({
         entertainment: true,
         sports: true,
         technology: true
     });
 
+    // update the category filters and calls the parent's update function
     const handleChange = (event) => {
         var newState = { ...state, [event.target.name]: event.target.checked }
         setState(newState);

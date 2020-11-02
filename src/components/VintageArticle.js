@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 // VintageArticle Component represents one article in the vintage view
 class VintageArticle extends Component {
 
+    // safely cleans a text variable
     clean = (text) => {
         if (text === null || text === "null") return "";
         return text;

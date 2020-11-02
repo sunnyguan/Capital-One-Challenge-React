@@ -12,6 +12,8 @@ import Divider from '@material-ui/core/Divider'
 // Article Component represents a single news card
 class Article extends Component {
 
+    // stores a list of paywalled sites
+    // scraped from GitHub chrome extension
     paywalls = [
         "adweek.com",
         "ad.nl",
@@ -169,6 +171,7 @@ class Article extends Component {
         "worldpoliticsreview.com"
     ]
 
+    // calculates the time since a date into "xxx days ago" format
     timeSince = (date) => {
         var seconds = Math.floor((new Date() - date) / 1000)
         var interval = seconds / 31536000
@@ -190,11 +193,13 @@ class Article extends Component {
         return Math.floor(seconds) + " seconds"
     }
 
+    // processes click event when user asks to open as a popup
     iframeProcess = (event) => {
         var url = this.props.article.url
         this.props.showIframe("https://mewyolkthymes.herokuapp.com/" + url) // using proxy for iframe display
     }
 
+    // return the appropriate color for each category
     getColor = (label) => {
         var color = "grey"
         if (label === "entertainment")
@@ -206,10 +211,12 @@ class Article extends Component {
         return color;
     }
 
+    // renders an article with its content information
     render() {
         const { article } = this.props
-        
         var time = this.timeSince(new Date(article.publishedAt))
+
+        // check to see if this website is in the paywall list
         var paywalled = false
         if (article.url) {
             for (var site of this.paywalls) {

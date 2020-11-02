@@ -9,6 +9,7 @@ import { VintageExpand, SearchBox, ToggleStyle } from './Tools'
 import CssBaseline from '@material-ui/core/CssBaseline';
 import ArticlesGrid from './ArticlesGrid'
 
+// declares the constants for dark mode and light mode
 export const light = {
     palette: {
         type: 'light',
@@ -25,10 +26,11 @@ export const dark = {
 class ModernNews extends Component {
 
     state = {
-        searchTerm: "",
-        theme: false
+        searchTerm: "", // current search term
+        theme: false // dark theme boolean
     }
 
+    // update the current search term
     updateSearch = (e) => {
         if (e.keyCode === 13) {
             e.preventDefault();
@@ -36,11 +38,14 @@ class ModernNews extends Component {
         }
     }
 
+    // toggles dark theme
     toggleTheme = () => {
         this.setState({ theme: !this.state.theme })
     }
 
+    // renders the modern view according to the selected theme and search filters
     render() {
+        // creates theme to be applied to the entire component
         const theme = createMuiTheme({
             palette: {
                 type: this.state.theme ? "dark" : "light",

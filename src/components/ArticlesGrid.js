@@ -12,6 +12,7 @@ const ARTICLES_PER_PAGE = 12;
 // ArticlesGrid Component represents a grid of news cards along with pagination and toggles
 class ArticlesGrid extends Component {
 
+    // return the number of columns for the grid depending on the width of screen
     getGridListCols = () => {
         if (isWidthUp('xl', this.props.width))
             return 4
@@ -23,20 +24,21 @@ class ArticlesGrid extends Component {
     }
 
     state = {
-        data: [],
-        error: false,
-        open: false,
-        page: 1,
-        filters: { "entertainment": true, "sports": true, "technology": true },
-        loading: false,
-        src: "about:blank"
+        data: [], // articles
+        error: false, // News API fetch error
+        open: false, // whether the iframe is opened or not
+        page: 1, // current pagination index
+        filters: { "entertainment": true, "sports": true, "technology": true }, // toggle filters booleans
+        loading: false, // whether the articles have been loaded from API
+        src: "about:blank" // iframe source
     }
 
+    // fetch the three categories of news articles when the component first mounts
     componentDidMount() {
         this.setState({ loading: true })
-        console.log("loading headlines...")
-        var categories = ["entertainment", "sports", "technology"]
+        var categories = ["entertainment", "sports", "technology"] // list of categories
         var promises = []
+
         categories.forEach(item => {
             promises.push(
                 fetch(`https://newsapi.org/v2/top-headlines?country=us&category=${item}&pageSize=100&apiKey=78b9d599c4f94f8fa3afb1a5458928d6`)
@@ -52,6 +54,7 @@ class ArticlesGrid extends Component {
             );
         })
 
+        // fetch all API requests and update the articles state
         Promise.all(promises).then(articles => {
             var allArticles = []
             var errorOccurred = false
@@ -71,35 +74,43 @@ class ArticlesGrid extends Component {
         })
     }
 
+    // safely check if the text string contains the query string
     contains = (text, query) => {
         if (query === "") return true;
         if (text === null) return false;
         return text.toLowerCase().includes(query.toLowerCase());
     }
 
+    // get the number of pages required for pagination
     getPageCount = (array) => {
         return Math.ceil(array.length / ARTICLES_PER_PAGE);
     }
 
+    // update the page index
     updatePage = (...[, value]) => {
         this.setState({ page: value })
     }
 
+    // update the filters for toggles
     updateFilters = (filters) => {
         this.setState({ filters: filters })
     }
 
+    // show an article in the iframe popup
     showIframe = (url) => {
-        console.log(url)
         this.setState({ src: url, open: true })
     }
 
+    // cleans the iframe source on close
     close = () => {
         this.setState({ src: "about: blank", open: false })
     }
 
+    // renders the grid of articles as well as the filters
     render() {
         var query = this.props.searchTerm;
+
+        // filters articles according to the toggles and the search term
         var filteredItem = this.state.data.filter(article => {
             var type1 = (article["label"] === "entertainment" && this.state.filters.entertainment)
             var type2 = (article["label"] === "sports" && this.state.filters.sports)
@@ -110,12 +121,15 @@ class ArticlesGrid extends Component {
             return textMatch && (type1 || type2 || type3)
         })
 
+        // find the start and end article index
         var start = (this.state.page - 1) * ARTICLES_PER_PAGE;
         if (start > filteredItem.length) start = 0;
         var end = start + ARTICLES_PER_PAGE;
 
+        // select the articles to be displayed
         var displayedItems = filteredItem.slice(start, end);
 
+        // renders the component
         return (
             <>
                 <div className={`custom-model-main ${this.state.open ? 'model-open' : ''}`}>

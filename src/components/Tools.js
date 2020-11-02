@@ -22,14 +22,17 @@ export const SearchBox = ({ updateSearch }) =>
 // ToggleStyle handles dark mode toggling
 export const ToggleStyle = ({ toggleTheme }) => {
 
+    // keep tracks of the current theme
     const [state, setState] = React.useState({
         darkMode: false
     });
 
+    // handles dark theme toggle
     const handleChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
     };
 
+    // handles toggle event
     const handleDarkMode = (event) => {
         handleChange(event);
         toggleTheme();
