@@ -9,6 +9,7 @@ import CardHeader from '@material-ui/core/CardHeader'
 import Avatar from '@material-ui/core/Avatar'
 import Divider from '@material-ui/core/Divider'
 
+// Article Component represents a single news card
 class Article extends Component {
 
     paywalls = [
@@ -168,108 +169,102 @@ class Article extends Component {
         "worldpoliticsreview.com"
     ]
 
-timeSince = (date) => {
-    var seconds = Math.floor((new Date() - date) / 1000);
+    timeSince = (date) => {
+        var seconds = Math.floor((new Date() - date) / 1000)
+        var interval = seconds / 31536000
 
-    var interval = seconds / 31536000;
+        if (interval > 1)
+            return Math.floor(interval) + " years"
+        interval = seconds / 2592000
+        if (interval > 1)
+            return Math.floor(interval) + " months"
+        interval = seconds / 86400
+        if (interval > 1)
+            return Math.floor(interval) + " days"
+        interval = seconds / 3600
+        if (interval > 1)
+            return Math.floor(interval) + " hours"
+        interval = seconds / 60
+        if (interval > 1)
+            return Math.floor(interval) + " minutes"
+        return Math.floor(seconds) + " seconds"
+    }
 
-    if (interval > 1) {
-        return Math.floor(interval) + " years";
+    iframeProcess = (event) => {
+        var url = this.props.article.url
+        this.props.showIframe("https://mewyolkthymes.herokuapp.com/" + url) // using proxy for iframe display
     }
-    interval = seconds / 2592000;
-    if (interval > 1) {
-        return Math.floor(interval) + " months";
-    }
-    interval = seconds / 86400;
-    if (interval > 1) {
-        return Math.floor(interval) + " days";
-    }
-    interval = seconds / 3600;
-    if (interval > 1) {
-        return Math.floor(interval) + " hours";
-    }
-    interval = seconds / 60;
-    if (interval > 1) {
-        return Math.floor(interval) + " minutes";
-    }
-    return Math.floor(seconds) + " seconds";
-}
 
-iframeProcess = (event) => {
-    var url = this.props.article.url
-    this.props.showIframe("https://mewyolkthymes.herokuapp.com/" + url)
-}
-
-getColor = (label) => {
-    var color = "grey";
-    if (label === "entertainment") {
-        color = "lightskyblue";
-    } else if (label === "sports") {
-        color = "lightsalmon";
-    } else {
-        color = "lightcoral";
+    getColor = (label) => {
+        var color = "grey"
+        if (label === "entertainment")
+            color = "lightskyblue"
+        else if (label === "sports")
+            color = "lightsalmon"
+        else
+            color = "lightcoral"
+        return color;
     }
-    return color;
-}
 
-render() {
-    const { article } = this.props
-    var time = this.timeSince(new Date(article.publishedAt))
-    var paywalled = false;
-    if(article.url) {
-        for(var site of this.paywalls) {
-            if(article.url.includes(site)) {
-                paywalled = true;
-                break;
+    render() {
+        const { article } = this.props
+        
+        var time = this.timeSince(new Date(article.publishedAt))
+        var paywalled = false
+        if (article.url) {
+            for (var site of this.paywalls) {
+                if (article.url.includes(site)) {
+                    paywalled = true;
+                    break;
+                }
             }
         }
-    }
 
-    return (
-        <Card key={article.id}>
-            <CardHeader
-                avatar={
-                    <Avatar aria-label="recipe">
-                        {article.source.name.substring(0, 1)}
-                    </Avatar>
-                }
-                title={article.source.name}
-                subheader={<>{time} ago - {article.label}</>}
-                style={{ background: this.getColor(article.label) }}
-            />
-            <CardMedia
-                component="img"
-                alt="associated picture"
-                height="450"
-                src={article.urlToImage === null ? "/icon.png" : article.urlToImage}
-                onError={e => {
-                    e.target.src = "/icon.png";
-                }}
-            />
-            <CardContent>
-                <Typography gutterBottom variant="h5" component="h2">
-                    {article.title}
-                </Typography>
-                <Typography variant="body1" color="textSecondary" component="p">
-                    {article.description}
-                </Typography>
-                <Divider />
-                <Typography variant="body2" color="textSecondary" component="p" style={{ marginTop: "10px" }}>
-                    {article.content}
-                </Typography>
-                {paywalled ? 
-                    <Typography variant="body2" color="textSecondary" component="p" style={{ marginTop: "10px", color: "lightsalmon" }}>
-                        Potential paywall detected!
-                    </Typography> : 
-                <></>}
-            </CardContent>
-            <CardActions>
-                <Button size="small" color="secondary" target="_blank" onClick={this.iframeProcess}>Open Here</Button>
-                <Button size="small" color="secondary" target="_blank" href={article.url}>Read More</Button>
-            </CardActions>
-        </Card>
-    )
-}
+        return (
+            <Card key={article.id}>
+                <CardHeader
+                    avatar={
+                        <Avatar aria-label="initial">
+                            {article.source.name.substring(0, 1)}
+                        </Avatar>
+                    }
+                    title={article.source.name}
+                    subheader={<>{time} ago - {article.label}</>}
+                    style={{ background: this.getColor(article.label) }}
+                />
+                <CardMedia
+                    component="img"
+                    alt="associated picture"
+                    height="450"
+                    src={article.urlToImage === null ? "/icon.png" : article.urlToImage}
+                    onError={e => {
+                        e.target.src = "/icon.png";
+                    }}
+                />
+                <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                        {article.title}
+                    </Typography>
+                    <Typography variant="body1" color="textSecondary" component="p">
+                        {article.description}
+                    </Typography>
+                    <Divider />
+                    <Typography variant="body2" color="textSecondary" component="p" style={{ marginTop: "10px" }}>
+                        {article.content}
+                    </Typography>
+                    { paywalled &&
+                        <Typography variant="body2" color="textSecondary" component="p" style={{ marginTop: "10px", color: "lightsalmon" }}>
+                            Potential paywall detected!
+                        </Typography> 
+                    }
+                </CardContent>
+                <CardActions>
+                    <Button size="small" color="secondary" target="_blank" onClick={this.iframeProcess}>Open Here</Button>
+                    <Button size="small" color="secondary" target="_blank" href={article.url}>Read More</Button>
+                </CardActions>
+            </Card>
+        )
+    }
 }
 
 export default Article

@@ -1,9 +1,9 @@
 import React from 'react'
-
 import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Switch from '@material-ui/core/Switch'
 
+// ToggleCategory functional component provides functionality for toggling news categories
 export const ToggleCategory = ({ updateFilters }) => {
     const [state, setState] = React.useState({
         entertainment: true,

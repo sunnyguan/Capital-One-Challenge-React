@@ -1,16 +1,13 @@
 import React, { Component } from 'react'
-
 import '../css/modern.css'
 import 'fontsource-roboto'
-
 import { Typography } from '@material-ui/core'
 import { createMuiTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/core'
 import { Box } from '@material-ui/core'
-import CssBaseline from '@material-ui/core/CssBaseline';
-
-import ArticlesGrid from './ArticlesGrid'
 import { VintageExpand, SearchBox, ToggleStyle } from './Tools'
+import CssBaseline from '@material-ui/core/CssBaseline';
+import ArticlesGrid from './ArticlesGrid'
 
 export const light = {
     palette: {
@@ -24,6 +21,7 @@ export const dark = {
     },
 }
 
+// ModernNews Component contains the the modern view, which uses ArticlesGrid as well as some surrounding components
 class ModernNews extends Component {
 
     state = {
@@ -38,12 +36,11 @@ class ModernNews extends Component {
         }
     }
 
-    toggleTheme = (e) => {
+    toggleTheme = () => {
         this.setState({ theme: !this.state.theme })
     }
 
     render() {
-        console.log(this.state)
         const theme = createMuiTheme({
             palette: {
                 type: this.state.theme ? "dark" : "light",
@@ -52,7 +49,6 @@ class ModernNews extends Component {
         return (
             <ThemeProvider theme={theme}>
                 <CssBaseline />
-                
                 <Box width="95%" style={{margin: "auto"}}>
                     <SearchBox updateSearch={this.updateSearch} />
                     <Typography variant="h3" className="heading">

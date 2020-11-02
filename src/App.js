@@ -2,11 +2,9 @@ import React from 'react';
 import './css/App.css';
 
 function App() {
-
   return (
-    <h1>Hi</h1>
+    <p>Testing Page!</p>
   )
-
 }
 
 export default App;

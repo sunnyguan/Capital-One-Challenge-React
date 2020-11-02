@@ -9,21 +9,16 @@ import { Typography } from '@material-ui/core'
 
 const ARTICLES_PER_PAGE = 12;
 
+// ArticlesGrid Component represents a grid of news cards along with pagination and toggles
 class ArticlesGrid extends Component {
 
     getGridListCols = () => {
-        if (isWidthUp('xl', this.props.width)) {
-            return 4;
-        }
-
-        if (isWidthUp('lg', this.props.width)) {
-            return 3;
-        }
-
-        if (isWidthUp('md', this.props.width)) {
+        if (isWidthUp('xl', this.props.width))
+            return 4
+        if (isWidthUp('lg', this.props.width))
+            return 3
+        if (isWidthUp('md', this.props.width))
             return 2;
-        }
-
         return 1;
     }
 
@@ -40,8 +35,8 @@ class ArticlesGrid extends Component {
     componentDidMount() {
         this.setState({ loading: true })
         console.log("loading headlines...")
-        var categories = ["entertainment", "sports", "technology"];
-        var promises = [];
+        var categories = ["entertainment", "sports", "technology"]
+        var promises = []
         categories.forEach(item => {
             promises.push(
                 fetch(`https://newsapi.org/v2/top-headlines?country=us&category=${item}&pageSize=100&apiKey=78b9d599c4f94f8fa3afb1a5458928d6`)
@@ -49,23 +44,23 @@ class ArticlesGrid extends Component {
                     .then(data => data["articles"])
                     .then(articles => {
                         for (var article of articles)
-                            article["label"] = item;
-                        return {"status": 200, "data": articles}
+                            article["label"] = item
+                        return { "status": 200, "data": articles }
                     }).catch(err => {
-                        return {"status": 500}
+                        return { "status": 500 }
                     })
             );
         })
 
         Promise.all(promises).then(articles => {
             var allArticles = []
-            var errorOccurred = false;
+            var errorOccurred = false
             for (var articleGroup of articles) {
-                if(articleGroup["status"] !== 200) 
+                if (articleGroup["status"] !== 200)
                     errorOccurred = true
-                allArticles = allArticles.concat(articleGroup["data"]);
+                allArticles = allArticles.concat(articleGroup["data"])
             }
-            if(!errorOccurred) {
+            if (!errorOccurred) {
                 allArticles.sort(function (a, b) {
                     return new Date(b.publishedAt) - new Date(a.publishedAt);
                 });
@@ -86,7 +81,7 @@ class ArticlesGrid extends Component {
         return Math.ceil(array.length / ARTICLES_PER_PAGE);
     }
 
-    updatePage = (event, value) => {
+    updatePage = (...[, value]) => {
         this.setState({ page: value })
     }
 
@@ -106,13 +101,13 @@ class ArticlesGrid extends Component {
     render() {
         var query = this.props.searchTerm;
         var filteredItem = this.state.data.filter(article => {
-            var type1 = (article["label"] === "entertainment" && this.state.filters.entertainment);
-            var type2 = (article["label"] === "sports" && this.state.filters.sports);
-            var type3 = (article["label"] === "technology" && this.state.filters.technology);
+            var type1 = (article["label"] === "entertainment" && this.state.filters.entertainment)
+            var type2 = (article["label"] === "sports" && this.state.filters.sports)
+            var type3 = (article["label"] === "technology" && this.state.filters.technology)
             var textMatch = this.contains(article["title"], query)
                 || this.contains(article["content"], query)
                 || this.contains(article["description"], query)
-            return textMatch && (type1 || type2 || type3);
+            return textMatch && (type1 || type2 || type3)
         })
 
         var start = (this.state.page - 1) * ARTICLES_PER_PAGE;
@@ -136,36 +131,39 @@ class ArticlesGrid extends Component {
                 </div>
 
                 <ToggleCategory updateFilters={this.updateFilters} />
-                <>
-                    <Box alignItems="center" justifyContent="center" display="flex" margin="15px">
-                        <Pagination count={this.state.loading ? 1 : this.getPageCount(filteredItem)} defaultPage={1} siblingCount={4}
-                            color="secondary" onChange={this.updatePage} />
-                    </Box>
-                    {this.state.loading || this.state.error
-                        ?
-                        <Typography variant="h5" className="heading">
-                            {this.state.error ? "Error fetching from API" : "Loading..."}
-                            </Typography>
-                        : <>
-                            {displayedItems.length > 0
-                                ?
-                                <Grid container spacing={3}>
-                                    {displayedItems.map((article, id) => {
-                                        return (
-                                            <Grid item key={id} xs={12 / this.getGridListCols()}>
-                                                <Article article={article} showIframe={this.showIframe} />
-                                            </Grid>
-                                        )
-                                    })}
-                                </Grid>
-                                :
-                                <Typography variant="h5" className="heading">
-                                    No articles found.
-                                    </Typography>
-                            }
-                        </>
-                    }
-                </>
+                <Box alignItems="center" justifyContent="center" display="flex" margin="15px">
+                    <Pagination 
+                        count={this.state.loading ? 1 : this.getPageCount(filteredItem)} 
+                        defaultPage={1} 
+                        siblingCount={4}
+                        color="secondary" 
+                        onChange={this.updatePage} 
+                    />
+                </Box>
+                {this.state.loading || this.state.error
+                    ?
+                    <Typography variant="h5" className="heading">
+                        {this.state.error ? "Error fetching from API" : "Loading..."}
+                    </Typography>
+                    : <>
+                        {displayedItems.length > 0
+                            ?
+                            <Grid container spacing={3}>
+                                {displayedItems.map((article, id) => {
+                                    return (
+                                        <Grid item key={id} xs={12 / this.getGridListCols()}>
+                                            <Article article={article} showIframe={this.showIframe} />
+                                        </Grid>
+                                    )
+                                })}
+                            </Grid>
+                            :
+                            <Typography variant="h5" className="heading">
+                                No articles found.
+                                </Typography>
+                        }
+                    </>
+                }
             </>
         )
     }
