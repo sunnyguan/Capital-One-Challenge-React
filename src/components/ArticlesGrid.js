@@ -30,7 +30,7 @@ class ArticlesGrid extends Component {
         open: false, // whether the iframe is opened or not
         page: 1, // current pagination index
         filters: { "entertainment": true, "sports": true, "technology": true }, // toggle filters booleans
-        loading: false, // whether the articles have been loaded from API
+        loading: true, // whether the articles have been loaded from API
         src: "about:blank" // iframe source
     }
 
