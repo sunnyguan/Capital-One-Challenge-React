@@ -17,6 +17,7 @@ Mew Yolk Thymes (New York Times) is a React application built around [News API](
     2. [Vintage View](#vintage-view)
         1. [VintageNews.js](#vintage-news)
         2. [VintageArticle.js](#vintage-article)
+    3. [API Service](#api-service)
 3. [Roadblocks](#roadblocks)
 4. [Final Thoughts](#final-thoughts)
 
@@ -75,6 +76,12 @@ Vintage News is similar to ArticlesGrid as it contains all of the news articles.
 Filename: `VintageArticle.js`
 
 Vintage Article displays one news article in vintage format. It shows the category, title, source, content, and description in a simple text format. The url (in the two horizontal lines) can be clicked to lead to the external article site.
+
+### API Service
+
+Filename: `FetchArticles.js`
+
+This helps both the Modern and Vintage views by fetching the three categories of news articles and returning them sorted by time (most recent first).
 
 ## Roadblocks
 
