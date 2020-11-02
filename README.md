@@ -4,6 +4,8 @@ Link: [https://mewyolkthymes.netlify.app/](https://mewyolkthymes.netlify.app/)
 
 Mew Yolk Thymes (New York Times) is a React application built around [News API](https://newsapi.org/). It provides a Material UI interface for users to quickly browse through global news, filter categories through searching or toggles, as well as viewing the news stories as if it was printed in a vintage newspaper in the 1980s. 
 
+![demo gif](public/c1demo.gif)
+
 ## Table of Contents
 
 1. [General Overview and Screenshots](#overview)
