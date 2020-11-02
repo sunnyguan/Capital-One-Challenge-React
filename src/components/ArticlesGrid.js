@@ -6,6 +6,7 @@ import Pagination from '@material-ui/lab/Pagination'
 import { Box } from '@material-ui/core'
 import { ToggleCategory } from './ToggleCategory'
 import { Typography } from '@material-ui/core'
+import { retrieve } from '../services/FetchArticles';
 
 const ARTICLES_PER_PAGE = 12;
 
@@ -35,43 +36,9 @@ class ArticlesGrid extends Component {
 
     // fetch the three categories of news articles when the component first mounts
     componentDidMount() {
-        this.setState({ loading: true })
-        var categories = ["entertainment", "sports", "technology"] // list of categories
-        var promises = []
-
-        categories.forEach(item => {
-            promises.push(
-                fetch(`https://newsapi.org/v2/top-headlines?country=us&category=${item}&pageSize=100&apiKey=78b9d599c4f94f8fa3afb1a5458928d6`)
-                    .then(data => data.json())
-                    .then(data => data["articles"])
-                    .then(articles => {
-                        for (var article of articles)
-                            article["label"] = item
-                        return { "status": 200, "data": articles }
-                    }).catch(err => {
-                        return { "status": 500 }
-                    })
-            );
-        })
-
-        // fetch all API requests and update the articles state
-        Promise.all(promises).then(articles => {
-            var allArticles = []
-            var errorOccurred = false
-            for (var articleGroup of articles) {
-                if (articleGroup["status"] !== 200)
-                    errorOccurred = true
-                allArticles = allArticles.concat(articleGroup["data"])
-            }
-            if (!errorOccurred) {
-                allArticles.sort(function (a, b) {
-                    return new Date(b.publishedAt) - new Date(a.publishedAt);
-                });
-                this.setState({ data: allArticles, loading: false })
-            } else {
-                this.setState({ loading: false, error: true })
-            }
-        })
+        retrieve().then(newState => {
+            this.setState(newState);
+        });
     }
 
     // safely check if the text string contains the query string
