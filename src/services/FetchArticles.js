@@ -4,7 +4,7 @@ export const retrieve = () => {
     var promises = []
     categories.forEach(item => {
         promises.push(
-            fetch(`https://newsapi.org/v2/top-headlines?country=us&category=${item}&pageSize=100&apiKey=e191d551ff8a44b09b5ddeb3afbf7bfa`)
+            fetch(`https://api.codetabs.com/v1/proxy/?quest=https://newsapi.org/v2/top-headlines?country=us&category=${item}&pageSize=100&apiKey=e191d551ff8a44b09b5ddeb3afbf7bfa`)
                 .then(data => data.json())
                 .then(data => data["articles"])
                 .then(articles => {
